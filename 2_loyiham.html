@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xalqaro Ovozli Soat</title>
+    <style>
+        :root { --bg: #0f172a; --card: #1e293b; --accent: #00d2ff; }
+        body {
+            background-color: var(--bg);
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .clock-wrapper {
+            background: var(--card);
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        #time {
+            font-size: 70px;
+            font-weight: bold;
+            color: var(--accent);
+            text-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+            margin-bottom: 20px;
+        }
+
+        .lang-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .lang-btn {
+            background: #334155;
+            border: 1px solid #475569;
+            color: white;
+            padding: 15px 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .lang-btn:hover {
+            background: var(--accent);
+            color: var(--bg);
+            transform: translateY(-3px);
+        }
+
+        .flag { font-size: 24px; }
+        .lang-name { font-size: 12px; font-weight: bold; }
+
+        .status-msg {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="clock-wrapper">
+    <div id="time">00:00:00</div>
+    <p>Vaqtni eshitish uchun davlatni tanlang:</p>
+
+    <div class="lang-grid">
+        <button class="lang-btn" onclick="speakTime('uz')">
+            <span class="flag">🇺🇿</span>
+            <span class="lang-name">O'zbek</span>
+        </button>
+        <button class="lang-btn" onclick="speakTime('ru')">
+            <span class="flag">🇷🇺</span>
+            <span class="lang-name">Русский</span>
+        </button>
+        <button class="lang-btn" onclick="speakTime('en')">
+            <span class="flag">🇺🇸</span>
+            <span class="lang-name">English</span>
+        </button>
+        <button class="lang-btn" onclick="speakTime('tr')">
+            <span class="flag">🇹🇷</span>
+            <span class="lang-name">Türkçe</span>
+        </button>
+        <button class="lang-btn" onclick="speakTime('zh')">
+            <span class="flag">🇨🇳</span>
+            <span class="lang-name">Chinese</span>
+        </button>
+        <button class="lang-btn" onclick="speakTime('ko')">
+            <span class="flag">🇰🇷</span>
+            <span class="lang-name">Korean</span>
+        </button>
+    </div>
+    
+    <div class="status-msg" id="status">Kutish rejimida...</div>
+</div>
+
+<script>
+    // Soatni yangilash
+    function updateTime() {
+        const now = new Date();
+        document.getElementById('time').innerText = now.toLocaleTimeString('it-IT');
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    // Ovoz chiqarish funksiyasi
+    function speakTime(langCode) {
+        const now = new Date();
+        const h = now.getHours();
+        const m = now.getMinutes();
+        
+        let text = "";
+        let voiceLang = "";
+
+        // Har bir til uchun alohida matn tayyorlash
+        switch(langCode) {
+            case 'uz':
+                text = `Hozir soat ${h} dan ${m} daqiqa o'tdi`;
+                voiceLang = 'ru-RU'; // O'zbekcha uchun eng yaqin talaffuz
+                break;
+            case 'ru':
+                text = `Сейчас время ${h} часов ${m} минут`;
+                voiceLang = 'ru-RU';
+                break;
+            case 'en':
+                text = `The time is now ${h} ${m}`;
+                voiceLang = 'en-US';
+                break;
+            case 'tr':
+                text = `Şu an saat ${h} ${m} geçiyor`;
+                voiceLang = 'tr-TR';
+                break;
+            case 'zh':
+                text = `现在是 ${h} 点 ${m} 分`;
+                voiceLang = 'zh-CN';
+                break;
+            case 'ko':
+                text = `지금은 ${h}시 ${m}분입니다`;
+                voiceLang = 'ko-KR';
+                break;
+        }
+
+        const speech = new SpeechSynthesisUtterance();
+        speech.text = text;
+        speech.lang = voiceLang;
+        speech.rate = 0.9;
+
+        // Statusni yangilash
+        document.getElementById('status').innerText = "Gapirmoqda: " + text;
+
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(speech);
+    }
+</script>
+
+</body>
+</html>
+</body>
+</html>
